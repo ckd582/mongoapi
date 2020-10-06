@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 require("dotenv").config();
 var apiRouter = require("./routers/routes");
 var path = require("path");
+var cors = require("cors");
 var app = express();
 var bodyParser = require("body-parser");
 
@@ -12,6 +13,7 @@ app.set("view engine", "ejs");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(cors());
 
 app.use("/api", apiRouter);
 
@@ -20,6 +22,14 @@ mongoose.connect(mongo_url, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+var db = mongoose.connection;
+
+if (!db) {
+  console.log("Error Connecting db");
+} else {
+  console.log("DB Connected Success");
+}
 
 app.get("/", function (request, response) {
   console.log(request);
